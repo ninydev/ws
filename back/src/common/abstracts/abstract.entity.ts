@@ -1,12 +1,12 @@
 import {
   Column,
   CreateDateColumn,
+  ObjectLiteral,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { IAbstractEntity } from './interfaces/iabstract-entity.interface';
 
-export abstract class AbstractEntity implements IAbstractEntity {
+export abstract class AbstractEntity implements ObjectLiteral {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
