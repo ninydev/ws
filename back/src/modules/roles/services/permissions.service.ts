@@ -4,13 +4,15 @@ import { Repository } from 'typeorm';
 import { Role } from '../entities/role.entity';
 import { AbstractService } from 'src/common/abstracts/abstract.service';
 import { Permission } from '../entities/permission.entity';
+import { PaginateConfig } from 'nestjs-paginate';
 
 @Injectable()
 export class PermissionsService extends AbstractService<Permission> {
   constructor(
     @InjectRepository(Role)
-    private permissionsRepository: Repository<Permission>,
+    private readonly permissionsRepository: Repository<Permission>,
+    private readonly permissionsPaginateConfig: PaginateConfig<Permission>,
   ) {
-    super(permissionsRepository);
+    super(permissionsRepository, permissionsPaginateConfig);
   }
 }

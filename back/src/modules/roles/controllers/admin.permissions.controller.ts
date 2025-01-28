@@ -12,6 +12,7 @@ import { PermissionsService } from '../services/permissions.service';
 import { Permission } from '../entities/permission.entity';
 import { AdminGuard } from 'src/guards/admin.guard';
 import { PermissionCreateDto } from '../dto/permission-create.dto';
+import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
 @Controller('permissions')
 @UseGuards(AdminGuard)
@@ -23,13 +24,12 @@ export class PermissionsController {
     return this.permissionsService.create(<Permission>permission);
   }
 
-  // @Get()
-  // readAll(
-  //   @Query('page') page: number,
-  //   @Query('limit') limit: number,
-  // ): Promise<PaginatedData<Permission, any>> {
-  //   return this.permissionsService.readPaginate({ page, limit });
-  // }
+  @Get()
+  public find(
+    @Paginate() query: PaginateQuery,
+  ): Promise<Paginated<Permission>> {
+    return this.permissionsService.find(query);
+  }
 
   @Get(':id')
   readOne(@Param('id') id: string): Promise<Permission> {

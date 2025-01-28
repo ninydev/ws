@@ -1,9 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import {
+  paginate,
+  PaginateConfig,
+  Paginated,
+  PaginateQuery,
+} from 'nestjs-paginate';
 import { ObjectLiteral, Repository } from 'typeorm';
 
 @Injectable()
 export class AbstractService<Entity extends ObjectLiteral> {
-  constructor(private readonly repository: Repository<Entity>) {}
+  constructor(
+    private readonly repository: Repository<Entity>,
+    private readonly paginateConfig: PaginateConfig<Entity>,
+  ) {}
   // async block(id: string): Promise<void> {
   //   await this.repository.update(id, { isBlocked: true });
   // }
@@ -17,16 +26,9 @@ export class AbstractService<Entity extends ObjectLiteral> {
     return this.repository.save(newEntity);
   }
 
-  readAll(): Promise<Entity[]> {
-    return this.repository.find();
+  async find(options: PaginateQuery): Promise<Paginated<Entity>> {
+    return paginate<Entity>(options, this.repository, this.paginateConfig);
   }
-
-  // readPaginate({ page, limit }): Promise<[Entity[], number]> {
-  //   return this.repository.findAndCount({
-  //     take: limit,
-  //     skip: limit * (page - 1),
-  //   });
-  // }
 
   findOne(options: object): Promise<Entity | null> {
     return this.repository.findOne(options);
